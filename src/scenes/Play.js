@@ -17,11 +17,11 @@ class Play extends Phaser.Scene {
         this.load.image('sand', './assets/5.png');
 
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {
-            frameWidth: 64,
-            frameHeight: 32,
+        this.load.spritesheet('explosion', './assets/explode.png', {
+            frameWidth: 16,
+            frameHeight: 16,
             startFrame: 0,
-            endRame: 9
+            endRame: 5
         });
     }
 
@@ -37,7 +37,7 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width / 2 - 8, 390, 'rocket').setScale(0.02, 0.02).setOrigin(0, 0);
 
         // add spaceships (x3)
-        this.helicopter = new Helicopter(this, 0, 132, 'helicopter', 0, 30).setScale(0.07, 0.07);
+        this.helicopter = new Helicopter(this, 0, 132, 'helicopter', 0, 50).setScale(0.07, 0.07);
         this.ship02 = new Spaceship(this, game.config.width + 96, 196, 'spaceship', 0, 20).setScale(0.02, 0.02).setOrigin(0, 0);
         this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setScale(0.02, 0.02).setOrigin(0, 0);
 
@@ -144,10 +144,10 @@ class Play extends Phaser.Scene {
     }
 
     checkHelision(rocket, helicopter) {
-        if (rocket.x < helicopter.x + helicopter.width * 0.07 &&
-            rocket.x + rocket.width * 0.02 > helicopter.x &&
-            rocket.y < helicopter.y + helicopter.height * 0.07 &&
-            rocket.height * 0.02 + rocket.y > helicopter.y) {
+        if (rocket.x < helicopter.x + helicopter.width * 0.02 &&
+            rocket.x + rocket.width * 0.07 > helicopter.x &&
+            rocket.y < helicopter.y + helicopter.height * 0.02 &&
+            rocket.height * 0.07 + rocket.y > helicopter.y) {
             return true;
         } else {
             return false;
