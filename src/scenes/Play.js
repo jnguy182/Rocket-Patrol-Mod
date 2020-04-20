@@ -7,6 +7,7 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('rocket', './assets/Player.png');
         this.load.image('spaceship', './assets/sheep.png');
+        this.load.image('helicopter', './assets/heli.png');
 
         // load parallax images
         this.load.image('sky', './assets/1.png');
@@ -32,23 +33,13 @@ class Play extends Phaser.Scene {
         this.cactus = this.add.tileSprite(0, 0, 640, 480, 'cactus').setOrigin(0, 0);
         this.sand = this.add.tileSprite(0, 0, 640, 480, 'sand').setOrigin(0, 0);
 
-        //
-        /* white rectangle borders
-        this.add.rectangle(5, 5, 630, 32, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(5, 443, 630, 32, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(5, 5, 32, 455, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(603, 5, 32, 455, 0xFFFFFF).setOrigin(0, 0);
-        // green UI background
-        this.add.rectangle(37, 42, 566, 64, 0x00FF00).setOrigin(0, 0);
-        */
-
         // add rocket (p1)
-        this.p1Rocket = new Rocket(this, game.config.width / 2 - 8, 431, 'rocket').setScale(0.01, 0.01).setOrigin(0, 0);
+        this.p1Rocket = new Rocket(this, game.config.width / 2 - 8, 390, 'rocket').setScale(0.02, 0.02).setOrigin(0, 0);
 
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + 192, 132, 'spaceship', 0, 30).setScale(0.01, 0.01);
-        this.ship02 = new Spaceship(this, game.config.width + 96, 196, 'spaceship', 0, 20).setScale(0.01, 0.01).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setScale(0.01, 0.01).setOrigin(0, 0);
+        this.helicopter = new Helicopter(this, 0, 132, 'helicopter', 0, 30).setScale(0.07, 0.07);
+        this.ship02 = new Spaceship(this, game.config.width + 96, 196, 'spaceship', 0, 20).setScale(0.02, 0.02).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setScale(0.02, 0.02).setOrigin(0, 0);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -106,17 +97,17 @@ class Play extends Phaser.Scene {
         }
 
         // scroll tile sprite
-        this.sky.tilePositionX += 0.5;
-        this.canyon.tilePositionX += 1;
-        this.desert.tilePositionX += 1.5;
-        this.cactus.tilePositionX += 1.5;
-        this.sand.tilePositionX += 1.5;
+        this.sky.tilePositionX += 0.025;
+        this.canyon.tilePositionX += 0.05;
+        this.desert.tilePositionX += 0.5;
+        this.cactus.tilePositionX += 0.5;
+        this.sand.tilePositionX += 2;
 
         if (!this.gameOver) {
             // update rocket sprite
             this.p1Rocket.update();
             // update spaceships (x3)
-            this.ship01.update();
+            this.helicopter.update();
             this.ship02.update();
             this.ship03.update();
         }
@@ -132,20 +123,31 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
+        if (this.checkHelision(this.p1Rocket, this.helicopter)) {
             console.log('kaboom ship 01');
             this.p1Rocket.reset();
-            this.shipExplode(this.ship01);
+            this.shipExplode(this.helicopter);
         }
 
     }
 
     checkCollision(rocket, ship) {
         // simple AABB checking
-        if (rocket.x < ship.x + ship.width * 0.01 &&
-            rocket.x + rocket.width * 0.01 > ship.x &&
-            rocket.y < ship.y + ship.height * 0.01 &&
-            rocket.height * 0.01 + rocket.y > ship.y) {
+        if (rocket.x < ship.x + ship.width * 0.02 &&
+            rocket.x + rocket.width * 0.02 > ship.x &&
+            rocket.y < ship.y + ship.height * 0.02 &&
+            rocket.height * 0.02 + rocket.y > ship.y) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    checkHelision(rocket, helicopter) {
+        if (rocket.x < helicopter.x + helicopter.width * 0.07 &&
+            rocket.x + rocket.width * 0.02 > helicopter.x &&
+            rocket.y < helicopter.y + helicopter.height * 0.07 &&
+            rocket.height * 0.02 + rocket.y > helicopter.y) {
             return true;
         } else {
             return false;
