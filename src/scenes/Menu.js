@@ -8,10 +8,14 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+
+        // load in new title screen
+        this.load.image('title', './assets/title.png');
     }
 
     create() {
         // menu display
+        /*
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -31,16 +35,20 @@ class Menu extends Phaser.Scene {
         let textSpacer = 64;
 
         this.add.text(centerX, centerY - textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Use ← → arrows to move & (F) to Fire', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 150, 'Use ← → arrows to move & (F) to Fire', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
-        this.add.text(centerX, centerY + textSpacer, 'Press ← for Easy or → for Hard', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + textSpacer + 150, 'Press ← for Easy or → for Hard', menuConfig).setOrigin(0.5);
+        */
 
-        this.add.text(20, 20, "Rocket Patrol Menu");
-        //this.scene.start("playScene");
+        this.title = this.add.tileSprite(0, 0, 640, 480, 'title').setOrigin(0, 0);
+
+        // this.add.text(20, 20, "Main Menu");
+        // this.scene.start("playScene");
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
     }
 
     update() {
@@ -61,6 +69,11 @@ class Menu extends Phaser.Scene {
             }
             this.sound.play('sfx_select');
             this.scene.start("playScene");
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyC)) {
+            // credits
+            this.sound.play('sfx_select');
+            this.scene.start("playCredit");
         }
     }
 }
